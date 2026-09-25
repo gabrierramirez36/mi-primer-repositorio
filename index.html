@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="cancha">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="BasketZone: cómo se juega baloncesto, equipos, jugadores y reglas, con una cancha interactiva y un test para practicar.">
+<meta name="theme-color" content="#0B1013" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#E7EBED" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="dark light">
+<title>BasketZone — el baloncesto explicado desde la cancha</title>
+
+<meta property="og:title" content="BasketZone — el baloncesto explicado desde la cancha">
+<meta property="og:description" content="Equipos, jugadores, reglas y una cancha interactiva para entender el juego.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23D4552A'/%3E%3Cg stroke='%230B1013' stroke-width='2' fill='none'%3E%3Cpath d='M2 16h28M16 2v28M6 6c8 4 8 16 0 20M26 6c-8 4-8 16 0 20'/%3E%3C/g%3E%3C/svg%3E">
+</head>
+
+<body>
+<a class="skip" href="#inicio">Saltar al contenido</a>
+
+<!-- Iconos reutilizables: un solo SVG para toda la página (sin imágenes externas) -->
+<svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+  <symbol id="i-ball" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="14.5" fill="currentColor"/>
+    <g fill="none" stroke="rgba(0,0,0,.55)" stroke-width="1.6">
+      <path d="M1.5 16h29M16 1.5v29M6 5.4c8.5 4.4 8.5 16.8 0 21.2M26 5.4c-8.5 4.4-8.5 16.8 0 21.2"/>
+    </g>
+  </symbol>
+  <symbol id="i-shield" viewBox="0 0 48 56">
+    <path d="M24 1 46 8v22c0 12-9.5 20.5-22 25C11.5 50.5 2 42 2 30V8Z" fill="var(--crest-a,#333)" stroke="var(--crest-b,#fff)" stroke-width="2.5"/>
+    <path d="M24 1 46 8v9H2V8Z" fill="var(--crest-b,#fff)" opacity=".9"/>
+  </symbol>
+  <symbol id="i-jersey" viewBox="0 0 64 64">
+    <path d="M22 6h20l14 8-6 11-5-3v36H19V22l-5 3-6-11Z" fill="var(--kit-a,#444)" stroke="var(--kit-b,#fff)" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M24 6c1.5 6 14.5 6 16 0" fill="none" stroke="var(--kit-b,#fff)" stroke-width="2.5"/>
+  </symbol>
+</svg>
+
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+<header class="topbar">
+  <a class="brand" href="#inicio">
+    <svg class="brand-ball" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-ball"/></svg>
+    <span>BasketZone</span>
+  </a>
+
+  <button class="burger" id="burger" aria-expanded="false" aria-controls="menu">
+    <span class="burger-lines" aria-hidden="true"></span>
+    <span class="burger-text">Menú</span>
+  </button>
+
+  <nav id="menu" class="menu" aria-label="Secciones">
+    <a href="#inicio">Inicio</a>
+    <a href="#cancha">La cancha</a>
+    <a href="#equipos">Equipos</a>
+    <a href="#jugadores">Jugadores</a>
+    <a href="#reglas">Reglas</a>
+    <a href="#test">Test</a>
+    <a href="#contacto">Votación</a>
+    <button class="theme" id="themeBtn" type="button">Modo claro</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ───────── INICIO ───────── -->
+<section id="inicio" class="hero">
+  <div class="hero-copy">
+    <p class="hero-kicker">Proyecto de Informática</p>
+    <h1>El baloncesto, explicado desde la cancha</h1>
+    <p class="lede">
+      Cinco jugadores por lado, un aro a 3,05 m de altura y 24 segundos para
+      decidir. Aquí puedes ver de dónde sale cada punto, qué equipos marcaron
+      la historia y probar si le tomaste el pulso al juego.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-solid" href="#cancha">Ver la cancha</a>
+      <a class="btn btn-ghost" href="#test">Hacer el test</a>
+    </div>
+
+    <dl class="quickfacts">
+      <div><dt>Jugadores en cancha</dt><dd>5 <span>por equipo</span></dd></div>
+      <div><dt>Altura del aro</dt><dd>3,05 <span>metros</span></dd></div>
+      <div><dt>Duración NBA</dt><dd>4 × 12 <span>minutos</span></dd></div>
+    </dl>
+  </div>
+
+  <!-- Mini juego: medidor de puntería -->
+  <div class="shot" id="shot">
+    <h2 class="shot-title">Prueba tu tiro</h2>
+    <p class="shot-help">Detén la marca en el centro del medidor. Mientras más al centro, mejor el tiro.</p>
+
+    <svg class="court-side" viewBox="0 0 420 260" role="img" aria-label="Vista lateral de un tablero con aro y un balón">
+      <defs>
+        <linearGradient id="woodSide" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--wood-1)"/>
+          <stop offset="1" stop-color="var(--wood-2)"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="222" width="420" height="38" fill="url(#woodSide)"/>
+      <g stroke="var(--chalk-line)" stroke-width="2" fill="none">
+        <path d="M0 224h420M96 224v-12"/>
+      </g>
+      <!-- Tablero y aro -->
+      <rect x="352" y="42" width="8" height="96" rx="2" fill="var(--chalk)" opacity=".85"/>
+      <rect x="352" y="138" width="8" height="84" fill="var(--ink-700)"/>
+      <rect x="334" y="96" width="26" height="30" fill="none" stroke="var(--leather)" stroke-width="3"/>
+      <path d="M318 126h34" stroke="var(--leather)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M320 128l3 18M328 128l2 18M336 128l1 18M344 128v18M351 128v18" stroke="var(--chalk)" stroke-width="1.6" opacity=".75"/>
+      <path d="M320 146h31" stroke="var(--chalk)" stroke-width="1.6" opacity=".55"/>
+      <!-- Balón -->
+      <g id="ballGroup">
+        <circle id="ball" cx="70" cy="204" r="16" fill="var(--leather)"/>
+        <g id="ballLines" fill="none" stroke="rgba(0,0,0,.5)" stroke-width="1.6">
+          <path d="M54 204h32M70 188v32M60 192c8 5 8 19 0 24M80 192c-8 5-8 19 0 24"/>
+        </g>
+      </g>
+    </svg>
+
+    <div class="meter" id="meter" aria-hidden="true">
+      <span class="meter-zone meter-zone--two"></span>
+      <span class="meter-zone meter-zone--three"></span>
+      <span class="meter-mark" id="meterMark"></span>
+    </div>
+
+    <div class="shot-controls">
+      <button class="btn btn-solid" id="shootBtn" type="button">Lanzar</button>
+      <p class="shot-feedback" id="shotFeedback" role="status" aria-live="polite">Tiros: 0 · Aciertos: 0 · Racha: 0</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── LA CANCHA ───────── -->
+<section id="cancha" class="band">
+  <div class="section-head">
+    <h2>La cancha y de dónde salen los puntos</h2>
+    <p>Toca una zona del plano para ver qué vale cada tiro y quién suele jugar ahí.</p>
+  </div>
+
+  <div class="court-layout">
+    <svg class="court-plan" viewBox="0 0 300 280" role="group" aria-label="Media cancha con zonas interactivas">
+      <defs>
+        <linearGradient id="woodPlan" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="var(--wood-1)"/>
+          <stop offset="1" stop-color="var(--wood-2)"/>
+        </linearGradient>
+      </defs>
+      <rect x="2" y="2" width="296" height="276" rx="4" fill="url(#woodPlan)"/>
+
+      <!-- Zonas interactivas (pintadas con opacidad baja) -->
+      <g class="zones">
+        <path class="zone" data-zone="triple" tabindex="0" role="button" aria-label="Zona de tres puntos"
+              d="M8 8h284v264H8Z"/>
+        <path class="zone" data-zone="media" tabindex="0" role="button" aria-label="Zona de dos puntos"
+              d="M22 8v58a128 128 0 0 0 256 0V8Z"/>
+        <rect class="zone" data-zone="pintura" tabindex="0" role="button" aria-label="La pintura"
+              x="112" y="6" width="76" height="98"/>
+        <path class="zone" data-zone="libre" tabindex="0" role="button" aria-label="Tiro libre"
+              d="M112 104h76a38 38 0 0 1-76 0Z"/>
+      </g>
+
+      <!-- Líneas de cancha -->
+      <g fill="none" stroke="var(--chalk-line)" stroke-width="2.4" stroke-linecap="round" pointer-events="none">
+        <rect x="8" y="8" width="284" height="264" rx="2"/>
+        <rect x="112" y="8" width="76" height="96"/>
+        <circle cx="150" cy="104" r="38"/>
+        <circle cx="150" cy="272" r="46"/>
+        <path d="M22 8v58a128 128 0 0 0 256 0V8"/>
+        <path d="M134 8h32"/>
+      </g>
+      <g pointer-events="none">
+        <rect x="134" y="8" width="32" height="5" fill="var(--chalk)" opacity=".9"/>
+        <circle cx="150" cy="26" r="11" fill="none" stroke="var(--leather)" stroke-width="3.5"/>
+      </g>
+    </svg>
+
+    <div class="zone-panel" id="zonePanel" aria-live="polite">
+      <p class="zone-value" id="zoneValue">Elige una zona</p>
+      <h3 id="zoneTitle">Cuatro zonas, distinto valor</h3>
+      <p id="zoneText">
+        La distancia al aro cambia todo: el valor del tiro, quién lo intenta y
+        cómo se defiende. Toca el plano para verlo zona por zona.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── EQUIPOS ───────── -->
+<section id="equipos">
+  <div class="section-head">
+    <h2>Equipos que marcaron el juego</h2>
+    <p>Seis franquicias con historia. Filtra por conferencia para ubicarlas.</p>
+  </div>
+
+  <div class="filters" role="group" aria-label="Filtrar equipos por conferencia">
+    <button class="chip is-on" data-filter="todos" type="button" aria-pressed="true">Todos</button>
+    <button class="chip" data-filter="este" type="button" aria-pressed="false">Conferencia Este</button>
+    <button class="chip" data-filter="oeste" type="button" aria-pressed="false">Conferencia Oeste</button>
+  </div>
+
+  <ul class="teams" id="teams">
+    <li class="team" data-conf="oeste" style="--crest-a:#552583;--crest-b:#FDB927">
+      <svg class="crest" viewBox="0 0 48 56" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h3>Los Angeles Lakers</h3>
+      <p class="team-meta">Los Ángeles · Oeste</p>
+      <p>Showtime, Magic, Kobe y LeBron: el equipo que convirtió el baloncesto en espectáculo.</p>
+      <p class="team-stat"><strong>17</strong> títulos de la NBA</p>
+    </li>
+    <li class="team" data-conf="este" style="--crest-a:#007A33;--crest-b:#F5F5F5">
+      <svg class="crest" viewBox="0 0 48 56" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h3>Boston Celtics</h3>
+      <p class="team-meta">Boston · Este</p>
+      <p>La franquicia con más anillos, construida sobre defensa y once campeonatos en trece años.</p>
+      <p class="team-stat"><strong>18</strong> títulos de la NBA</p>
+    </li>
+    <li class="team" data-conf="oeste" style="--crest-a:#1D428A;--crest-b:#FFC72C">
+      <svg class="crest" viewBox="0 0 48 56" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h3>Golden State Warriors</h3>
+      <p class="team-meta">San Francisco · Oeste</p>
+      <p>Cambiaron la estrategia moderna: si el triple vale más, hay que lanzarlo mucho más.</p>
+      <p class="team-stat"><strong>7</strong> títulos de la NBA</p>
+    </li>
+    <li class="team" data-conf="este" style="--crest-a:#CE1141;--crest-b:#F5F5F5">
+      <svg class="crest" viewBox="0 0 48 56" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h3>Chicago Bulls</h3>
+      <p class="team-meta">Chicago · Este</p>
+      <p>Los seis anillos de los noventa con Jordan y Pippen que hicieron global a la liga.</p>
+      <p class="team-stat"><strong>6</strong> títulos de la NBA</p>
+    </li>
+    <li class="team" data-conf="este" style="--crest-a:#98002E;--crest-b:#F9A01B">
+      <svg class="crest" viewBox="0 0 48 56" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h3>Miami Heat</h3>
+      <p class="team-meta">Miami · Este</p>
+      <p>Conocidos por su cultura de trabajo: llegar en forma, defender fuerte y competir siempre.</p>
+      <p class="team-stat"><strong>3</strong> títulos de la NBA</p>
+    </li>
+    <li class="team" data-conf="oeste" style="--crest-a:#5A6872;--crest-b:#C4CED4">
+      <svg class="crest" viewBox="0 0 48 56" aria-hidden="true"><use href="#i-shield"/></svg>
+      <h3>San Antonio Spurs</h3>
+      <p class="team-meta">San Antonio · Oeste</p>
+      <p>Dos décadas de consistencia con un juego de pases que se estudia en todo el mundo.</p>
+      <p class="team-stat"><strong>5</strong> títulos de la NBA</p>
+    </li>
+  </ul>
+  <p class="empty" id="teamsEmpty" hidden>No hay equipos en esa conferencia dentro de esta lista.</p>
+</section>
+
+<!-- ───────── JUGADORES ───────── -->
+<section id="jugadores" class="band">
+  <div class="section-head">
+    <h2>Cómo se ve un gran jugador en números</h2>
+    <p>Promedios aproximados de carrera. Abre cada ficha para ver en qué destaca.</p>
+  </div>
+
+  <div class="players" id="players">
+    <article class="player" style="--kit-a:#552583;--kit-b:#FDB927">
+      <div class="player-top">
+        <svg class="kit" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-jersey"/></svg>
+        <div>
+          <h3>LeBron James</h3>
+          <p class="player-meta">Alero · 2,06 m · dorsal 23</p>
+        </div>
+      </div>
+      <ul class="stats" data-stats>
+        <li><span>Puntos</span><b>27,1</b><i style="--pct:90%"></i></li>
+        <li><span>Asistencias</span><b>7,4</b><i style="--pct:62%"></i></li>
+        <li><span>Rebotes</span><b>7,5</b><i style="--pct:63%"></i></li>
+      </ul>
+      <button class="more" type="button" aria-expanded="false">Ver más</button>
+      <p class="player-note">Su fuerza es leer el juego: puede jugar de base o de pívot en la misma posesión y lleva más de dos décadas rindiendo al máximo nivel.</p>
+    </article>
+
+    <article class="player" style="--kit-a:#1D428A;--kit-b:#FFC72C">
+      <div class="player-top">
+        <svg class="kit" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-jersey"/></svg>
+        <div>
+          <h3>Stephen Curry</h3>
+          <p class="player-meta">Base · 1,88 m · dorsal 30</p>
+        </div>
+      </div>
+      <ul class="stats" data-stats>
+        <li><span>Puntos</span><b>24,8</b><i style="--pct:82%"></i></li>
+        <li><span>Asistencias</span><b>6,4</b><i style="--pct:53%"></i></li>
+        <li><span>Triples por partido</span><b>3,9</b><i style="--pct:98%"></i></li>
+      </ul>
+      <button class="more" type="button" aria-expanded="false">Ver más</button>
+      <p class="player-note">Obliga a defenderlo desde que cruza el medio campo. Ese respeto abre espacios para todo su equipo, incluso cuando no lanza.</p>
+    </article>
+
+    <article class="player" style="--kit-a:#00538C;--kit-b:#B8C4CA">
+      <div class="player-top">
+        <svg class="kit" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-jersey"/></svg>
+        <div>
+          <h3>Luka Dončić</h3>
+          <p class="player-meta">Base-escolta · 2,01 m · dorsal 77</p>
+        </div>
+      </div>
+      <ul class="stats" data-stats>
+        <li><span>Puntos</span><b>28,6</b><i style="--pct:95%"></i></li>
+        <li><span>Asistencias</span><b>8,2</b><i style="--pct:68%"></i></li>
+        <li><span>Rebotes</span><b>8,6</b><i style="--pct:72%"></i></li>
+      </ul>
+      <button class="more" type="button" aria-expanded="false">Ver más</button>
+      <p class="player-note">Juega a un ritmo propio: cambia de velocidad, usa el cuerpo y encuentra al compañero libre antes de que la defensa se acomode.</p>
+    </article>
+
+    <article class="player" style="--kit-a:#00471B;--kit-b:#EEE1C6">
+      <div class="player-top">
+        <svg class="kit" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-jersey"/></svg>
+        <div>
+          <h3>Giannis Antetokounmpo</h3>
+          <p class="player-meta">Ala-pívot · 2,11 m · dorsal 34</p>
+        </div>
+      </div>
+      <ul class="stats" data-stats>
+        <li><span>Puntos</span><b>23,5</b><i style="--pct:78%"></i></li>
+        <li><span>Rebotes</span><b>9,9</b><i style="--pct:83%"></i></li>
+        <li><span>Tapones</span><b>1,2</b><i style="--pct:60%"></i></li>
+      </ul>
+      <button class="more" type="button" aria-expanded="false">Ver más</button>
+      <p class="player-note">Cubre la cancha en tres o cuatro zancadas. Domina cerca del aro y defiende cualquier posición, algo poco común en un jugador de su tamaño.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ───────── REGLAS ───────── -->
+<section id="reglas">
+  <div class="section-head">
+    <h2>Reglas que explican casi todo</h2>
+    <p>Seis ideas suficientes para seguir un partido completo sin perderte.</p>
+  </div>
+
+  <div class="rules">
+    <details class="rule" open>
+      <summary>El objetivo</summary>
+      <p>Anotar más puntos que el rival metiendo el balón en su aro, y evitar que ellos lo hagan en el tuyo. Si el partido termina empatado se juegan prórrogas de cinco minutos hasta que haya ganador.</p>
+    </details>
+    <details class="rule">
+      <summary>Cuánto vale cada tiro</summary>
+      <p>Un tiro libre vale 1 punto, cualquier canasta dentro del arco vale 2 y desde detrás del arco vale 3.</p>
+    </details>
+    <details class="rule">
+      <summary>Cómo se mueve el balón</summary>
+      <p>Se avanza driblando o pasando. Si sostienes el balón y das más de dos pasos sin botarlo es violación de pasos, y si botas con las dos manos o retomas el bote es dobles.</p>
+    </details>
+    <details class="rule">
+      <summary>El reloj manda</summary>
+      <p>En la NBA cada ataque tiene 24 segundos para lanzar al aro, y hay 8 segundos para pasar el balón a la mitad de cancha del rival. El partido son cuatro cuartos de 12 minutos.</p>
+    </details>
+    <details class="rule">
+      <summary>Faltas personales</summary>
+      <p>El contacto ilegal se sanciona como falta. Con cinco faltas en FIBA (seis en la NBA) el jugador queda eliminado del partido, y las faltas sobre un tirador dan tiros libres.</p>
+    </details>
+    <details class="rule">
+      <summary>Las cinco posiciones</summary>
+      <p>Base dirige el ataque, escolta anota desde fuera, alero combina ambas cosas, ala-pívot trabaja cerca del aro y pívot domina la pintura y el rebote.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ───────── TEST ───────── -->
+<section id="test" class="band">
+  <div class="section-head">
+    <h2>Test rápido</h2>
+    <p>Cinco preguntas con lo que acabas de leer.</p>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <p class="quiz-count" id="quizCount">Pregunta 1 de 5</p>
+    <h3 class="quiz-q" id="quizQuestion">Cargando…</h3>
+    <div class="quiz-options" id="quizOptions"></div>
+    <p class="quiz-feedback" id="quizFeedback" role="status" aria-live="polite"></p>
+    <div class="quiz-foot">
+      <button class="btn btn-solid" id="quizNext" type="button" hidden>Siguiente</button>
+      <button class="btn btn-ghost" id="quizRestart" type="button" hidden>Repetir el test</button>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── VOTACIÓN ───────── -->
+<section id="contacto">
+  <div class="section-head">
+    <h2>¿Cuál es tu equipo favorito?</h2>
+    <p>Los votos se guardan en tu propio navegador, así que el conteo es tuyo.</p>
+  </div>
+
+  <div class="vote-layout">
+    <form id="basketForm" novalidate>
+      <div class="field">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" name="nombre" autocomplete="name" maxlength="40"
+               placeholder="Escribe tu nombre" aria-describedby="nombreError">
+        <p class="error" id="nombreError" hidden>Escribe tu nombre para registrar el voto.</p>
+      </div>
+
+      <div class="field">
+        <label for="equipo">Equipo favorito</label>
+        <select id="equipo" name="equipo">
+          <option value="Lakers">Los Angeles Lakers</option>
+          <option value="Celtics">Boston Celtics</option>
+          <option value="Warriors">Golden State Warriors</option>
+          <option value="Bulls">Chicago Bulls</option>
+          <option value="Heat">Miami Heat</option>
+          <option value="Spurs">San Antonio Spurs</option>
+        </select>
+      </div>
+
+      <button class="btn btn-solid" type="submit">Registrar voto</button>
+      <p class="result" id="resultado" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="tally">
+      <h3>Conteo de votos</h3>
+      <ul id="tallyList" class="tally-list"></ul>
+      <button class="btn btn-ghost btn-small" id="resetVotes" type="button">Borrar mis votos</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-brand">
+      <svg class="brand-ball" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-ball"/></svg>
+      BasketZone
+    </p>
+    <p>Proyecto de Informática · página estática publicada en Netlify.</p>
+    <p class="footer-note">Datos y promedios con fines educativos, aproximados.</p>
+  </div>
+</footer>
+
+<button class="totop" id="toTop" type="button" hidden>
+  <span aria-hidden="true">↑</span><span class="sr">Volver arriba</span>
+</button>
+
+<script src="script.js" defer></script>
+</body>
+</html>
